@@ -180,8 +180,6 @@ def WriteToFileClients(loginID, registrationDate):
    Format:
    id,cityID,name,surname,phone,address
 """
-
-
 def WriteToFilePersons(start, end):
     ClearFile('login.txt')
     ClearFile('clients.txt')
