@@ -2,8 +2,11 @@
 
 import string
 import random
+import datetime
+from datetime import datetime
 from string import split
 from faker import Faker
+
 fake = Faker()
 
 def GetFirstName():
@@ -78,16 +81,28 @@ def GetUsername(name, surname):
     return username
 
 def GetRandomDate(lowYear = 2015, highYear = 2017):
-    day = str(random.randint(1, 28))
-    day = day.rjust(2, '0')
-    month = str(random.randint(1, 12))
-    month = month.rjust(2, '0')
+    newDate = datetime(random.randint(lowYear, highYear),
+	                   random.randint(1, 12),
+					   random.randint(1, 28))
+					   
+    return newDate
+	
+def GetAllDatesSorted(start, end):
+    dates = []
+    for i in range(start, end):
+	    newDate = GetRandomDate()
+	    dates.append(newDate)
+		
+    dates.sort()
+    return dates
 
-    date = str(random.randint(lowYear, highYear))
-    date += month
-    date += day
-
-    return date
+def GetDateFormatted(dateToBeFormatted):
+    dateString = ''
+    dateString += str(dateToBeFormatted.month) + '\\'
+    dateString += str(dateToBeFormatted.day) + '\\'
+    dateString += str(dateToBeFormatted.year) + ' '
+    dateString += '0:00:00'
+    return dateString
 
 def ClearFile(fileName):
     f = open(fileName, 'w')
@@ -99,11 +114,11 @@ def WriteToFileLogin(loginID, name, surname):
     surname = surname[1:-1]
 
     line = str(loginID) + ','
+    line += '0'
     line += GetEmail(name, surname) + ','
     line += GetUsername(name, surname) + ','
     line += GetPassword() + ','
-    line += 'Yes,'
-    line += '#PlaceholderForPriority#'
+    line += '1'
 
     f = open("login.txt", "a")
 
@@ -112,14 +127,14 @@ def WriteToFileLogin(loginID, name, surname):
 
     f.close()
 
-def WriteToFileClients(loginID):
+def WriteToFileClients(loginID, registrationDate):
     ccn = '"'
     ccn += fake.credit_card_number()
     ccn += '"'
 
-    client = loginID + ','
+    client = str(loginID) + ','
     client += ccn + ','
-    client += GetRandomDate()
+    client += GetDateFormatted(registrationDate)
 
     f = open("clients.txt", "a")
 
@@ -129,16 +144,21 @@ def WriteToFileClients(loginID):
     f.close()
 
 def WriteToFilePersons(start, end):
-    lines = []
     ClearFile('login.txt')
-    Clearfile('clients.txt')
+    ClearFile('clients.txt')
+	
+    listOfDates = GetAllDatesSorted(start, end)
+    listOfDatesCounter = int(0)
+
+    f = open("persons.txt", "w")
 
     for i in range(start, end):
         name = GetFirstName()
         surname = GetLastName()
 
         WriteToFileLogin(i, name, surname)
-        WriteToFileClients(i)
+        WriteToFileClients(i, listOfDates[listOfDatesCounter])
+        listOfDatesCounter += 1
 
         line = str(i) + ','
         line += str(random.randint(1,3173959)) + ','
@@ -146,11 +166,6 @@ def WriteToFilePersons(start, end):
         line += surname + ','
         line += GetPhoneNumber(9) + ','
         line += GetAddress()
-        lines.append(line)
-
-    f = open("persons.txt", "w")
-    
-    for line in lines:
         f.write(line)
         f.write('\n')
 
@@ -160,4 +175,5 @@ if __name__ == "__main__":
     startingID = int(input("Enter the starting ID ---> "))
     endingID = int(input("Enter the ending ID ---> "))
     endingID += 1
+
     WriteToFilePersons(startingID, endingID)  
