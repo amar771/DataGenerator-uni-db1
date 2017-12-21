@@ -1,5 +1,5 @@
-# Python 2.7
 """
+   Python 2.7
    Random data generator using faker library.
 """
 
@@ -13,6 +13,7 @@ from faker import Faker
 
 fake = Faker()
 
+
 def GetFirstName():
     nameList = split(fake.name())
     while len(nameList) > 2:
@@ -22,6 +23,7 @@ def GetFirstName():
     name += str(nameList[0])
     name += '\"'
     return name
+
 
 def GetLastName():
     nameList = split(fake.name())
@@ -33,12 +35,12 @@ def GetLastName():
     lastName += '\"'
     return lastName
 
+
 def GetAddress():
     address = fake.address()
     while len(address) > 35:
         address = str(fake.address())
 
-    
     addressList = split(address)
     finalAddress = '\"'
     for i in addressList:
@@ -48,6 +50,7 @@ def GetAddress():
     finalAddress += '\"'
     return finalAddress
 
+
 def GetPhoneNumber(size):
     phone = '\"'
     for i in range(size):
@@ -56,16 +59,18 @@ def GetPhoneNumber(size):
     phone += '\"'
     return phone
 
+
 def GetEmail(name, surname):
     providers = ['gmail.com', 'yahoo.com', 'hotmail.com',
-            'outlook.com', 'edu.fit.ba', 'mail.com', 
-            'protonmail.com', 'aol.com', 'yandex.com', 'zoho.com']
-    
+                 'outlook.com', 'edu.fit.ba', 'mail.com',
+                 'protonmail.com', 'aol.com', 'yandex.com', 'zoho.com']
+
     email = '"' + name + surname + '@' + \
             providers[random.randint(0, len(providers)) - 1] + \
             '"'
 
     return email
+
 
 def GetPassword():
     password = '"'
@@ -76,6 +81,7 @@ def GetPassword():
     password += '"'
     return password
 
+
 def GetUsername(name, surname):
     username = '"' + name + surname
     for i in range(3):
@@ -84,21 +90,24 @@ def GetUsername(name, surname):
     username += '"'
     return username
 
-def GetRandomDate(lowYear = 2015, highYear = 2017):
+
+def GetRandomDate(lowYear=2015, highYear=2017):
     newDate = datetime(random.randint(lowYear, highYear),
-	                   random.randint(1, 12),
-					   random.randint(1, 28))
-					   
+                       random.randint(1, 12),
+                       random.randint(1, 28))
+
     return newDate
-	
+
+
 def GetAllDatesSorted(start, end):
     dates = []
     for i in range(start, end):
-	    newDate = GetRandomDate()
-	    dates.append(newDate)
-		
+        newDate = GetRandomDate()
+        dates.append(newDate)
+
     dates.sort()
     return dates
+
 
 def GetDateFormatted(dateToBeFormatted):
     dateString = ''
@@ -108,7 +117,11 @@ def GetDateFormatted(dateToBeFormatted):
     dateString += '0:00:00'
     return dateString
 
-#Cleans all files from previously generated data becuase data in files is connected
+
+"""
+   Cleans all files from previously generated data
+   becuase data in files is connected
+"""
 def ClearFile(fileName):
     f = open(fileName, 'w')
     f.write('')
@@ -136,6 +149,7 @@ def WriteToFileLogin(loginID, name, surname):
     f.write('\n')
 
     f.close()
+
 
 """
    Writes data to clients.txt
@@ -166,10 +180,12 @@ def WriteToFileClients(loginID, registrationDate):
    Format:
    id,cityID,name,surname,phone,address
 """
+
+
 def WriteToFilePersons(start, end):
     ClearFile('login.txt')
     ClearFile('clients.txt')
-	
+
     listOfDates = GetAllDatesSorted(start, end)
     listOfDatesCounter = int(0)
 
@@ -184,7 +200,7 @@ def WriteToFilePersons(start, end):
         listOfDatesCounter += 1
 
         line = str(i) + ','
-        line += str(random.randint(1,3173959)) + ','
+        line += str(random.randint(1, 3173959)) + ','
         line += name + ','
         line += surname + ','
         line += GetPhoneNumber(9) + ','
@@ -204,4 +220,5 @@ if __name__ == "__main__":
     endingID = int(input("Enter the ending ID ---> "))
     endingID += 1
 
-    WriteToFilePersons(startingID, endingID)  
+    WriteToFilePersons(startingID, endingID)
+
