@@ -1,3 +1,4 @@
 # Data Generator
 
-Generates .txt data for MS Access database
+Quick script that generates .txt data for MS Access database.
+Not really reusable.
