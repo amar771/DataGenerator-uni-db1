@@ -1,11 +1,10 @@
 """
-   Python 2.7
+   Python 2.7.14
    Random data generator using faker library.
 """
 
 import string
 import random
-import datetime
 
 from datetime import datetime
 from string import split
@@ -111,28 +110,29 @@ def GetAllDatesSorted(start, end):
 
 def GetDateFormatted(dateToBeFormatted):
     dateString = ''
-    dateString += str(dateToBeFormatted.month) + '\\'
-    dateString += str(dateToBeFormatted.day) + '\\'
+    dateString += str(dateToBeFormatted.month) + '/'
+    dateString += str(dateToBeFormatted.day) + '/'
     dateString += str(dateToBeFormatted.year) + ' '
     dateString += '0:00:00'
     return dateString
 
 
-"""
-   Cleans all files from previously generated data
-   becuase data in files is connected
-"""
 def ClearFile(fileName):
+    """
+     Cleans all files from previously generated data
+     becuase data in files is connected
+    """
     f = open(fileName, 'w')
     f.write('')
     f.close()
 
-"""
-   Writes data to login.txt
-   Format:
-   id,permission[0-none],email,username,password,active[1-true]
-"""
+
 def WriteToFileLogin(loginID, name, surname):
+    """
+     Writes data to login.txt
+     Format:
+     id,permission[0-none],email,username,password,active[1-true]
+    """
     name = name[1:-1]
     surname = surname[1:-1]
 
@@ -151,12 +151,12 @@ def WriteToFileLogin(loginID, name, surname):
     f.close()
 
 
-"""
-   Writes data to clients.txt
-   Format:
-   id,creditcard,registrationdate[MM\DD\YYYY H:MM:SS]
-"""
 def WriteToFileClients(loginID, registrationDate):
+    """
+     Writes data to clients.txt
+     Format:
+     id,creditcard,registrationdate[MM\DD\YYYY H:MM:SS]
+    """
     ccn = '"'
     ccn += fake.credit_card_number()
     ccn += '"'
@@ -172,17 +172,16 @@ def WriteToFileClients(loginID, registrationDate):
 
     f.close()
 
-"""
-   Writes to file persons.txt
-   This is the main one, for every line of data it adds it adds
-   corresponding data to login.txt and clients.txt by calling
-   appropriate functions.
-   Format:
-   id,cityID,name,surname,phone,address
-"""
-
 
 def WriteToFilePersons(start, end):
+    """
+     Writes to file persons.txt
+     This is the main one, for every line of data it adds it adds
+     corresponding data to login.txt and clients.txt by calling
+     appropriate functions.
+     Format:
+     id,cityID,name,surname,phone,address
+    """
     ClearFile('login.txt')
     ClearFile('clients.txt')
 
@@ -210,15 +209,15 @@ def WriteToFilePersons(start, end):
 
     f.close()
 
-"""
-   Asks user for starting ID (in case some data is already entered
-   and ending ID
-   number of rows/lines = endingID - startingID
-"""
+
 if __name__ == "__main__":
+    """
+     Asks user for starting ID (in case some data is already entered
+     and ending ID
+     number of rows/lines = endingID - startingID
+    """
     startingID = int(input("Enter the starting ID ---> "))
     endingID = int(input("Enter the ending ID ---> "))
     endingID += 1
 
     WriteToFilePersons(startingID, endingID)
-
